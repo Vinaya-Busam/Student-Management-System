@@ -15,8 +15,5 @@ public class HelloController {
         return "Hello World!!";
     }
 
-    @GetMapping("/about")
-    public String about() {
-        return "This is about Student Management System";
-    }
+    
 }
