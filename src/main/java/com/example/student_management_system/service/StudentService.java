@@ -27,4 +27,29 @@ public class StudentService {
 
         return null;
     }
+
+    public Student update(int id, Student updatedStudent) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                student.setName(updatedStudent.getName());
+                student.setEmail(updatedStudent.getEmail());
+                student.setAge(updatedStudent.getAge());
+
+                return student;
+            }
+        }
+
+        return null;
+    }
+
+    public String delete(int id) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                students.remove(student);
+                return "Student Deleted Successfully";
+            }
+        }
+
+        return "Student Not Found";
+    }
 }
