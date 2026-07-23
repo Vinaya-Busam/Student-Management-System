@@ -5,6 +5,7 @@ import com.example.student_management_system.service.StudentService;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/student")
@@ -22,7 +23,7 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    public Student add(@RequestBody Student student) {
+    public Student add(@Valid @RequestBody Student student) {
         return studentService.addStudent(student); 
 
     }
