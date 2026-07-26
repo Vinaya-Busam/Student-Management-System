@@ -17,6 +17,16 @@ public class StudentService {
         this.studentRepo = studentRepo;
     }
 
+    // Helper method to map Student entity to StudentResponseDTO
+    private StudentResponseDTO mapToResponseDTO(Student student) {
+
+        return new StudentResponseDTO(
+                student.getId(),
+                student.getName(),
+                student.getEmail()
+        );
+    }
+
 
     public StudentResponseDTO addStudent(StudentRequestDTO studentRequest) {
         Student student = new Student();
@@ -24,19 +34,25 @@ public class StudentService {
         student.setAge(studentRequest.getAge());
         student.setEmail(studentRequest.getEmail());
         Student savedStudent = studentRepo.save(student);
-        return new StudentResponseDTO(savedStudent.getId(), savedStudent.getName(), savedStudent.getEmail());
+        return mapToResponseDTO(savedStudent);
     }
 
     public List<StudentResponseDTO> getAllStudents() {
         return studentRepo.findAll().stream()
-                .map(student -> new StudentResponseDTO(student.getId(), student.getName(), student.getEmail()))
+                .map(this::mapToResponseDTO)
                 .toList();
     }
 
     public StudentResponseDTO getStudentById(int id) {
         return studentRepo.findById(id)
-                .map(student -> new StudentResponseDTO(student.getId(), student.getName(), student.getEmail()))
+                .map(this::mapToResponseDTO)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
+    }
+
+    public StudentResponseDTO getStudentByName(String name) {
+        return studentRepo.findByName(name)
+                .map(this::mapToResponseDTO)
+                .orElseThrow(() -> new RuntimeException("Student not found with name: " + name));
     }
 
     public StudentResponseDTO update(int id, StudentRequestDTO request) {
@@ -48,7 +64,7 @@ public class StudentService {
         
         Student updated = studentRepo.save(st);
 
-        return new StudentResponseDTO(updated.getId(), updated.getName(), updated.getEmail());
+        return mapToResponseDTO(updated);
     }
 
     public String delete(int id) {

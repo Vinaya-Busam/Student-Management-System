@@ -42,6 +42,11 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/getStudentByName/{name}")
+    public ResponseEntity<StudentResponseDTO> getStudentByName(@PathVariable String name) {
+        return new ResponseEntity<>(studentService.getStudentByName(name), HttpStatus.OK);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<StudentResponseDTO> update(@PathVariable int id, @RequestBody StudentRequestDTO updatedStudentRequest) {
         StudentResponseDTO updated = studentService.update(id, updatedStudentRequest);
