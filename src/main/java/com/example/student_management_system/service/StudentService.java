@@ -40,15 +40,15 @@ public class StudentService {
     }
 
     public StudentResponseDTO update(int id, StudentRequestDTO request) {
-        StudentRequestDTO st = studentRepo.findById(id).orElse(null);
-        if (st != null) {
-            st.setName(updatedStudentRequest.getName());
-            st.setAge(updatedStudentRequest.getAge());
-            st.setEmail(updatedStudentRequest.getEmail());
+        Student st = studentRepo.findById(id).orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+       
+        st.setName(request.getName());
+        st.setAge(request.getAge());
+        st.setEmail(request.getEmail());
+        
+        Student updated = studentRepo.save(st);
 
-            return studentRepo.save(st);
-        }
-        return null;
+        return new StudentResponseDTO(updated.getId(), updated.getName(), updated.getEmail());
     }
 
     public String delete(int id) {
