@@ -2,6 +2,8 @@ package com.example.student_management_system.controller;
 
 import com.example.student_management_system.model.Student;
 import com.example.student_management_system.service.StudentService;
+import com.example.student_management_system.dto.StudentResponseDTO;
+import com.example.student_management_system.dto.StudentRequestDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,24 +27,24 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Student> add(@Valid @RequestBody Student student) {
-        Student addedStudent = studentService.addStudent(student);
-        return new ResponseEntity<>(addedStudent, HttpStatus.CREATED);
+    public ResponseEntity<StudentResponseDTO> add(@Valid @RequestBody StudentRequestDTO request) {
+        StudentResponseDTO response = studentService.addStudent(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/getAllStudents")
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
         return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
 
     @GetMapping("/getStudent/{id}")
-    public Student getStudentById(@PathVariable int id) {
-        return studentService.getStudentById(id);
+    public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable int id) {
+        return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Student> update(@PathVariable int id, @RequestBody Student updatedStudent) {
-        Student updated = studentService.update(id, updatedStudent);
+    public ResponseEntity<StudentResponseDTO> update(@PathVariable int id, @RequestBody StudentRequestDTO updatedStudentRequest) {
+        StudentResponseDTO updated = studentService.update(id, updatedStudentRequest);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 

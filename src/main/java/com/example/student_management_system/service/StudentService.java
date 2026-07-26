@@ -1,8 +1,12 @@
 package com.example.student_management_system.service;
 
+import com.example.student_management_system.dto.StudentResponseDTO;
 import com.example.student_management_system.model.Student;
 import org.springframework.stereotype.Service;
 import com.example.student_management_system.repository.StudentRepo;
+import com.example.student_management_system.dto.StudentResponseDTO;
+import com.example.student_management_system.dto.StudentRequestDTO;
+
 import java.util.*;
 
 @Service
@@ -14,24 +18,33 @@ public class StudentService {
     }
 
 
-    public Student addStudent(Student student) {
-        return studentRepo.save(student);
+    public StudentResponseDTO addStudent(StudentRequestDTO studentRequest) {
+        Student student = new Student();
+        student.setName(studentRequest.getName());
+        student.setAge(studentRequest.getAge());
+        student.setEmail(studentRequest.getEmail());
+        Student savedStudent = studentRepo.save(student);
+        return new StudentResponseDTO(savedStudent.getId(), savedStudent.getName(), savedStudent.getEmail());
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepo.findAll();
+    public List<StudentResponseDTO> getAllStudents() {
+        return studentRepo.findAll().stream()
+                .map(student -> new StudentResponseDTO(student.getId(), student.getName(), student.getEmail()))
+                .toList();
     }
 
-    public Student getStudentById(int id) {
-        return studentRepo.findById(id).orElse(null);
+    public StudentResponseDTO getStudentById(int id) {
+        return studentRepo.findById(id)
+                .map(student -> new StudentResponseDTO(student.getId(), student.getName(), student.getEmail()))
+                .orElse(null);
     }
 
-    public Student update(int id, Student updatedStudent) {
-        Student st = studentRepo.findById(id).orElse(null);
+    public StudentResponseDTO update(int id, StudentRequestDTO request) {
+        StudentRequestDTO st = studentRepo.findById(id).orElse(null);
         if (st != null) {
-            st.setName(updatedStudent.getName());
-            st.setAge(updatedStudent.getAge());
-            st.setEmail(updatedStudent.getEmail());
+            st.setName(updatedStudentRequest.getName());
+            st.setAge(updatedStudentRequest.getAge());
+            st.setEmail(updatedStudentRequest.getEmail());
 
             return studentRepo.save(st);
         }
