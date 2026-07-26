@@ -36,7 +36,7 @@ public class StudentService {
     public StudentResponseDTO getStudentById(int id) {
         return studentRepo.findById(id)
                 .map(student -> new StudentResponseDTO(student.getId(), student.getName(), student.getEmail()))
-                .orElse(null);
+                .orElseThrow(() -> new RuntimeException("Student not found"));
     }
 
     public StudentResponseDTO update(int id, StudentRequestDTO request) {
