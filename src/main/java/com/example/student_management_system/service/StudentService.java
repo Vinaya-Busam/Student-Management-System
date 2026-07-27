@@ -71,4 +71,12 @@ public class StudentService {
         studentRepo.deleteById(id);
         return "Student Deleted";
     }
+
+
+    public List<StudentResponseDTO> findStudentOlderThan(int age) {
+        List<Student> students = studentRepo.findStudentsOlderThan(age);
+        return students.stream()
+                .map(this::mapToResponseDTO)
+                .toList();
+    }
 }

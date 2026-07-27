@@ -59,4 +59,10 @@ public class StudentController {
         return new ResponseEntity<>("Student deleted successfully", HttpStatus.OK);
     }
 
+
+    @GetMapping("/findOlderThan/{age}")
+    public ResponseEntity<List<StudentResponseDTO>> findStudentsOlderThan(@PathVariable int age) {
+        return new ResponseEntity<>(studentService.findStudentOlderThan(age), HttpStatus.OK);
+    }
+
 }
