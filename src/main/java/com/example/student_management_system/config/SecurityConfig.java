@@ -22,7 +22,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
             // Swagger
             .requestMatchers("/swagger-ui/**",
-                "/v3/api-docs/**")
+                "/v3/api-docs/**",
+                "/h2-console/**")
                 .permitAll()
             // Public APIs
             .requestMatchers("/student/hello", "/student/getAllStudents", "/student/getStudent/**", "/student/getStudentByName/**")
@@ -34,6 +35,9 @@ public class SecurityConfig {
                 .authenticated()            
         ).httpBasic(Customizer.withDefaults());
 
+        http.headers(headers ->
+           headers.frameOptions(frame -> frame.sameOrigin())
+        );
         return http.build();
     }
 
@@ -43,15 +47,15 @@ public class SecurityConfig {
     }
 
 
-    @Bean 
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin123"))
-                .roles("ADMIN")
-                .build();
+    // @Bean 
+    // public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+    //     UserDetails admin = User.builder()
+    //             .username("admin")
+    //             .password(passwordEncoder.encode("admin123"))
+    //             .roles("ADMIN")
+    //             .build();
 
-        return new InMemoryUserDetailsManager(admin);
-    }
+    //     return new InMemoryUserDetailsManager(admin);
+    // }
 
 }
