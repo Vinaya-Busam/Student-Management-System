@@ -3,6 +3,9 @@ package com.example.student_management_system.service;
 import org.springframework.stereotype.Service;
 import com.example.student_management_system.dto.LoginResponseDTO;
 import com.example.student_management_system.dto.LoginRequestDTO;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 @Service
