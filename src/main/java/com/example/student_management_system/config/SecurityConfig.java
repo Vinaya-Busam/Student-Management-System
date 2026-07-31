@@ -14,9 +14,17 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import com.example.student_management_system.filter.JwtAuthenticationFilter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -26,9 +34,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-            // Swagger
-            .requestMatchers("/swagger-ui/**",
+            .requestMatchers(
+                "/auth/login",
+                "/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/h2-console/**")
                 .permitAll()
@@ -40,7 +50,7 @@ public class SecurityConfig {
                 hasRole("ADMIN")
             .anyRequest()
                 .authenticated()            
-        ).httpBasic(Customizer.withDefaults());
+            ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.headers(headers ->
            headers.frameOptions(frame -> frame.sameOrigin())
