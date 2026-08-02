@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.student_management_system.repository.StudentRepo;
 import com.example.student_management_system.dto.StudentResponseDTO;
 import com.example.student_management_system.dto.StudentRequestDTO;
+import com.example.student_management_system.exception.StudentNotFoundException;
 
 import java.util.*;
 
@@ -46,17 +47,17 @@ public class StudentService {
     public StudentResponseDTO getStudentById(int id) {
         return studentRepo.findById(id)
                 .map(this::mapToResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
     }
 
     public StudentResponseDTO getStudentByName(String name) {
         return studentRepo.findByName(name)
                 .map(this::mapToResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Student not found with name: " + name));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found with name: " + name));
     }
 
     public StudentResponseDTO update(int id, StudentRequestDTO request) {
-        Student st = studentRepo.findById(id).orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+        Student st = studentRepo.findById(id).orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
        
         st.setName(request.getName());
         st.setAge(request.getAge());
