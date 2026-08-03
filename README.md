@@ -23,6 +23,7 @@ A RESTful Student Management System built using Spring Boot that demonstrates se
 - JWT
 - Swagger/OpenAPI
 - Maven
+- Lombok
 
 ## API Documentation
 
